@@ -6,13 +6,34 @@ can be imported unchanged into notebooks, scripts, or a Streamlit front end.
 
 ## Quick start
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate          # Windows  (macOS/Linux: source .venv/bin/activate)
-pip install -r requirements.txt
-pytest -v
-streamlit run app.py            # opens the web app at http://localhost:8501
+You need **Python 3.14** (from python.org; tick *"Add python.exe to PATH"*) and Git.
+
+```powershell
+git clone https://github.com/shunerwadel/vehicle-dynamics-lab.git
+cd vehicle-dynamics-lab
+powershell -ExecutionPolicy Bypass -File .\setup.ps1   # once: creates .venv, installs packages, runs the tests
+powershell -ExecutionPolicy Bypass -File .\run.ps1     # starts the app and opens http://localhost:8501
 ```
+
+* `setup.ps1 -Locked` installs the exact package versions from `requirements-lock.txt`
+  instead of the minimum versions in `requirements.txt`. Use it if a newer package breaks something.
+* `run.ps1 -Port 8502` serves on another port; `-NoBrowser` skips opening the browser. Stop the app with Ctrl+C.
+* After `git pull`, run `setup.ps1` again to pick up any new packages and re-check the tests.
+* Saved baselines live in `user_data/` (not in Git), so each computer keeps its own.
+
+<details>
+<summary>Manual setup (macOS/Linux, or without the scripts)</summary>
+
+```bash
+python3.14 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt      # Windows: .\.venv\Scripts\python.exe
+.venv/bin/python -m pytest
+.venv/bin/python -m streamlit run app.py                 # then open http://localhost:8501
+```
+
+`.streamlit/config.toml` runs Streamlit headless (no first-launch email prompt, no browser
+auto-open) and turns off usage statistics.
+</details>
 
 The web app (`app.py`) has a sidebar for the car setup, an **Experiment Runner** tab
 (cornering or straight-line tests with Plotly charts and theory boxes), and a

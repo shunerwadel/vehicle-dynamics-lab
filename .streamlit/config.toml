@@ -1,0 +1,11 @@
+# Streamlit settings for this project (used whenever the app is started from
+# the repository root). See https://docs.streamlit.io/develop/api-reference/configuration/config.toml
+
+[server]
+# Skip the first-launch email prompt and don't open a browser automatically
+# (run.ps1 opens the browser once the app is ready).
+headless = true
+
+[browser]
+# Don't send usage statistics to Streamlit.
+gatherUsageStats = false
