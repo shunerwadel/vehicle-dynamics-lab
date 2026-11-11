@@ -1071,6 +1071,32 @@ FOCUS_BASELINE_NAME_JS = """
 """
 
 
+# Streamlit reserves a full header row in the sidebar for an app logo. This app
+# has no logo, so that row is empty space above "Vehicle Setup". Collapse it.
+# The collapse control stays an overlay so the sidebar can still be closed.
+SIDEBAR_HEADER_CSS = """
+<style>
+[data-testid="stSidebarHeader"] {
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    position: relative;
+    z-index: 2;
+}
+[data-testid="stLogoSpacer"] {
+    display: none !important;
+}
+[data-testid="stSidebarCollapseButton"] {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.25rem;
+}
+</style>
+"""
+
+
 # =============================================================================
 # Layout pieces
 # =============================================================================
@@ -1320,6 +1346,7 @@ def render_chat_tab() -> None:
 # =============================================================================
 def main() -> None:
     init_state()
+    st.html(SIDEBAR_HEADER_CSS)
     render_sidebar()
 
     st.title("Vehicle Dynamics Lab")
