@@ -1,0 +1,16 @@
+# Tested with Python 3.14. Minimums are the versions the app and tests were
+# verified with (the app relies on recent Streamlit features such as popovers
+# that can be closed from code and HTML elements that run JavaScript).
+# For an exact copy of a known-good environment, install requirements-lock.txt instead.
+
+# Core numerical stack used by the physics engine
+numpy>=2.5
+scipy>=1.18
+
+# Web front end (app.py), data handling and plotting
+streamlit>=1.67
+pandas>=3.1
+plotly>=7.1
+
+# Testing
+pytest>=9.2
