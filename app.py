@@ -678,6 +678,16 @@ def comparison_rows(metrics: list[Metric], base: list[Metric]) -> list[dict[str,
     ]
 
 
+def render_markdown_table(rows: list[dict[str, str]], columns: tuple[str, ...]) -> None:
+    def cell(value: str) -> str:
+        return value.replace("|", r"\|").replace("\n", " ")
+
+    header = "| " + " | ".join(columns) + " |"
+    separator = "| " + " | ".join("---" for _ in columns) + " |"
+    body = ["| " + " | ".join(cell(row[column]) for column in columns) + " |" for row in rows]
+    st.markdown("\n".join([header, separator, *body]))
+
+
 # =============================================================================
 # Charts: absolute views
 # =============================================================================
@@ -1263,12 +1273,16 @@ def render_results(res: dict[str, Any]) -> None:
     render_metric_grid(metrics, base_metrics)
     if base_metrics:
         with st.expander("Comparison table: baseline vs new"):
-            st.dataframe(comparison_rows(metrics, base_metrics), hide_index=True, width="stretch")
+            render_markdown_table(comparison_rows(metrics, base_metrics),
+                                  ("Result", "Baseline", "New", "Change"))
             diffs = setup_differences(json.loads(res["setup_json"]), ss.baseline)
             if diffs:
                 st.markdown("**Setup changes behind these results**")
-                st.dataframe([{"Parameter": d.label, "Baseline": d.baseline, "New": d.current,
-                               "Change": d.change} for d in diffs], hide_index=True, width="stretch")
+                render_markdown_table(
+                    [{"Parameter": d.label, "Baseline": d.baseline, "New": d.current, "Change": d.change}
+                     for d in diffs],
+                    ("Parameter", "Baseline", "New", "Change"),
+                )
 
     st.divider()
     compare_toggle("plots", "exp")
